@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Keluarga</h2>
+		<ul class="nav navbar-left panel_toolbox">
+			<li><a th:href="@{~/keluarga/add}" id="btn-addkeluarga"><i
+					class="fa fa-plus"></i></a></li>
+		</ul>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+		<div class="row" style="margin:0;">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Hubungan</th>
+						<th>Nama</th>
+						<th>JK</th>
+						<th>TGL. LAHIR</th>
+						<th>PENDIDIKAN</th>
+						<th>PEKERJAAN</th>
+						<th>#</th>
+					</tr>
+				</thead>
+				<tbody id="keluarga-content">
+
+				</tbody>
+		</div>
+	</div>
+</div>
+
+<script>
+	//1. baca fungsi javascript
+	//fungsi javascript
+	function loadData() {
+		//fungsi jquery
+		$.ajax({
+			url : '/keluarga/list',
+			type : 'get',
+			dataType : 'html',
+			success : function(result) {
+				$("#keluarga-content").html(result);
+			}
+		});
+	}
+	//2. fungsi jquery, pertama kali di halaman load
+	$(function() {
+		loadData();
+	});
+
+	//tambah Data Keluarga
+	$("#btn-add").click(function(event) {
+		event.preventDefault();
+		var url = 'keluarga/add';
+		$.ajax({
+			url : url,
+			type : 'get',
+			dataType : 'html',
+			success : function(data) {
+				$('#main-modal-content').html(data);
+				$('#main-modal').modal('show');
+			}
+		});
+	});
+</script>
+</html>

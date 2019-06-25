@@ -1,0 +1,148 @@
+<!-- content mulai -->
+<form th:action="@{~/sertifikasi/save}"
+	th:object="${sertifikasi}" method="post" id="form-sertifikasi">
+	<div class="modal-content">
+		<div class="modal-header" style="background-color: blue">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close" style="background-color: white">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h4 class="modal-title">Form Sertifikasi</h4>
+		</div>
+		<div class="modal-body">
+		<div class="wrapper">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group ">
+						<div class="col">
+							<label class="col col-form-label">Nama Sertifikasi *</label>
+							<div class="col">
+								<input type="text" th:field="*{biodataId}" /> 
+								<input type="text" th:field="*{certificateName}"  class="form-control"
+									required>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-5">
+					<label class="col col-form-label">Penerbit *</label> <input
+						type="text" name="publisher" class="form-control"  th:field="*{publisher}"  required>
+				</div>
+			</div>
+
+
+			<div class="form-group row">
+				<div class="col">
+					<label class="col col-form-label">Berlaku Mulai</label>
+					<div class="col form-group row">
+						<div class="col-md-3">
+							<select name='validStartMonth' id="validStartMonth"
+								class="form-control">
+								<option value="">- Pilih Bulan -</option>
+								<option th:each="i:${#numbers.sequence(1,12)}" th:value="${i}"
+									th:text="${i}" th:field="*{validStartMonth}" />
+							</select>
+						</div>
+						<div class="col-md-3">
+							<select id="validStartYear" name='validStartYear'
+								class="form-control" th:field="*{validStartYear}" ></select>
+						</div>
+
+					</div>
+				</div>
+				<div class="col">
+					<label class="col col-form-label">Berlaku Sampai</label>
+
+					<div class="col-md-3">
+						<select name="untilMonth" id="untilMonth" class="form-control"
+							disabled>
+							<option value="">- Pilih Bulan -</option>
+							<option th:each="i:${#numbers.sequence(1,12)}" th:value="${i}"
+								th:field="*{untilMonth}" th:text="${i}" />
+						</select>
+					</div>
+					<div class="col-md-3">
+						<select id="untilYear" name="untilYear" class="form-control"
+							th:field="*{untilYear}"   disabled></select>
+					</div>
+				</div>
+			</div>
+			<label class="col col-form-label">Catatan</label>
+			<div class="col">
+				<textarea name="notes" style="resize: unset" class="form-control"></textarea>
+			</div>
+
+			<br> <br>
+			<div class="btn-group pull-right" role="group" aria-label="...">
+				<button th:href="@{~/sertifikasi/index}" type="button"
+					class="btn btn-warning col link-modal">
+					<font style="color: white">Batal</font>
+				</button>
+				<button  type="submit" class="btn btn-primary col" >
+					<font style="color: white"> <i class="fa fa-save"></i>Simpan
+					</font>
+				</button>
+
+				</div>
+			</div>
+
+			
+		</div>
+		</div>
+</form>
+
+
+<script type="text/javascript">
+//validasi disable
+	$("#validStartMonth").change(function() {
+		if ($("#validStartMonth").val() != "" || null) {
+			$("#untilMonth").prop("disabled", false);
+		} else
+			$("#untilMonth").prop("disabled", true);
+	});
+	
+	$("#validStartYear").change(function() {
+		if ($("#validStartYear").val() != "" || null) {
+			$("#untilYear").prop("disabled", false);
+		} else
+			$("#untilYear").prop("disabled", true);
+	});
+	
+
+	//Select tahun kebawah
+	var max1 = new Date().getFullYear();
+	min1 = max1 - 20, select1 = document.getElementById('validStartYear');
+
+	var opt1 = document.createElement('option');
+	opt1.value = "";
+	opt1.innerHTML = "- Pilih Tahun -";
+	select1.appendChild(opt1);
+	for (var i = max1; i >= min1; i--) {
+		var opt1 = document.createElement('option');
+		opt1.value = i;
+		opt1.innerHTML = i;
+		select1.appendChild(opt1);
+	}
+	//select1.value = new Date().getFullYear();
+
+	//Select tahun keatas
+	var min2 = new Date().getFullYear();
+	max2 = min2 + 20, select2 = document.getElementById('untilYear');
+
+	var opt2 = document.createElement('option');
+	opt2.value = "";
+	opt2.innerHTML = "- Pilih Tahun -";
+	select2.appendChild(opt2);
+	for (var j = min2; j <= max2+2; j++) {
+		var opt2 = document.createElement('option');
+		opt2.value = j;
+		opt2.innerHTML = j;
+		select2.appendChild(opt2);
+	}
+	//select2.value = new Date().getFullYear();
+	
+		
+</script>
+
+</body>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="x_panel">
+	<div class="x_title">
+		<h2>Keahlian</h2>
+		<ul class="nav navbar-left panel_toolbox">
+			<li><a th:href="@{~/keahlian/add}" id="btn-addkeahlian"><i
+					class="fa fa-plus"></i></a></li>
+		</ul>
+		<div class="clearfix"></div>
+	</div>
+	<div class="x_content">
+		<div class="row" style="margin: 0;">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Nama Keahlian</th>
+						<th>Level Keahlian</th>
+						<th>#</th>
+					</tr>
+				</thead>
+				<tbody id="keahlian-content">
+
+				</tbody>
+				</div>
+				</div>
+				</div>
+
+				<script>
+	//1. baca fungsi javascript
+	//fungsi javascript
+	function loadData() {
+		//fungsi jquery
+		$.ajax({
+			url : '/keahlian/list',
+			type : 'get',
+			dataType : 'html',
+			success : function(result) {
+				$("#keahlian-content").html(result);
+			}
+		});
+	}
+	//2. fungsi jquery, pertama kali di halaman load
+	$(function() {
+		loadData();
+	});
+
+	// 3. tambah Data Keluarga
+	$("#btn-add").click(function(event) {
+		event.preventDefault();
+		var url = 'keahlian/add';
+		$.ajax({
+			url : url,
+			type : 'get',
+			dataType : 'html',
+			success : function(data) {
+				$('#main-modal-content').html(data);
+				$('#main-modal').modal('show');
+			}
+		});
+	});
+	
+	// 4. event di modal input, kemudian cari elemen dengan id => form-keahlian
+	// eventnya itu adalah ketika formnya di submit
+	$("#main-modal").on("submit", "#form-keahlian", function() {
+		// inisialisasi variable dataForm, diambil dari serialize method
+		var dataForm = $(this).serialize()
+		// inisialisasi variable urlForm, diambil dari attribute action form
+		// sehingga utk CREATE, UPDATE, DELETE menggunakan data ini, dan tidak perlu buat event submit berkali-kali
+		var urlForm = $(this).attr('action');
+		// submit data dengan AJAX
+		$.ajax({
+			url : urlForm, // url diisi dengan variable urlForm
+			type : 'post',
+			data : dataForm, // data diisi dengan variable dataForm
+			dataType : 'html',
+			done : function() {
+				$("#main-modal").find(".main-modal-content").html("");
+			},
+			success : function(result) {
+				// masukkan dulu resultnya ke modal
+				$("#main-modal").find(".main-modal-content").html(result)
+				// check jumlah element yang memiliki class => has-error
+				var check = $("#main-modal").find(".has-error").length;
+				// jika tidak ada error
+				if (check == 0) {
+					// menyembunyikan modal dengan id => main-modal
+					$("#main-modal").modal('hide');
+					// tampilkan data dengan memanggil method loadData
+					loadData();
+				}
+			},
+		});
+		// untuk mencegah supaya tidak submit automatis,
+		// sehingga form akan diam tidak melakukan action apapun
+		return false;
+	});
+		
+	
+</script>
+</html>
